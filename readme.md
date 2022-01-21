@@ -13,14 +13,11 @@ sudo apt-get update
 sudo apt-get install sbt
 ```
 
-## create tables
-```shell
-spark-shell -i src/Database.scala
-```
 
 
 ## Load data into hdfs
 ```shell
+gsutil cp gs://pbd_dm_21/airbnb_c.zip .
 unzip airbnb_c.zip
 hdfs dfs -put airbnb_c/* project
 ```
@@ -30,9 +27,14 @@ hdfs dfs -put airbnb_c/* project
 git clone https://github.com/mumot-inf-7/bigdata-project2.git
 ```
 
-## compile and run scala
+## create tables
 ```shell
 cd bigdata-project2
+spark-shell -i src/Database.scala
+```
+
+## compile and run scala
+```shell
 sbt package 
 spark-submit target/scala-2.12/spark_airbnb_2.12-0.1.jar project
 ```
