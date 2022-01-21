@@ -1,8 +1,6 @@
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import cities._
 
-type B = "berlin"
-
 object Main {
   var path: String = ""
 
