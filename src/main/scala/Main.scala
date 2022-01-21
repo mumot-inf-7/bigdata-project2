@@ -1,4 +1,5 @@
 import org.apache.spark.sql.{DataFrame, SparkSession}
+import cities._
 
 object Main {
   var path: String = ""
@@ -7,11 +8,13 @@ object Main {
     path = args(0)
     val ds = getDS()
 
+    Times(ds.calendarDS.toList().reduce((a,b) => a.union(b))).run()
+    Places(ds.listingsDS).run()
     Facts().run()
-    Times(ds.calendarDS).run()
+
   }
 
-  def getDS()= {
+  def getDS() = {
     val sqlContext = SparkSession.builder()
       .appName("Facts")
       .config("spark.master", "local")
@@ -31,21 +34,20 @@ object Main {
         .cache()
     }
 
-    val cities = List("Berlin", "Paris", "Madrid")
+    val citiesListingsDS = CitiesBuilder.fromFn(city => readCsvFile(s"${city}Listings.csv"))
 
-    val listingsDS = cities
-      .map(city => readCsvFile(s"${city}Listings.csv"))
-      .reduce((a, b) => a.union(b))
-
-    val calendarsDS = List("Berlin", "Paris")
-      .map(city => readCsvFile(s"${city}Calendar.csv"))
-      .reduce((a, b) => a.union(b))
-      .union(
-        getDF("MadridCalendar.csv")
+    val citiesCalendarsDS = CitiesBuilder.fromFn {
+      case city@CityNames.Madrid => {
+        getDF(s"${city}Calendar.csv")
           .drop("adjusted_price", "minimum_nights", "maximum_nights")
-      )
+          .cache()
+      }
+      case city =>
+        readCsvFile(s"${city}Calendar.csv")
+    }
 
-    case class X(calendarDS: DataFrame, listingsDS: DataFrame)
-    X(calendarsDS, listingsDS)
+
+    case class X(calendarDS: Cities[DataFrame], listingsDS: Cities[DataFrame])
+    X(citiesCalendarsDS, citiesListingsDS)
   }
 }
