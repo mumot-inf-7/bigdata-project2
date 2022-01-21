@@ -19,6 +19,7 @@ sudo apt-get install sbt
 ```shell
 gsutil cp gs://pbd_dm_21/airbnb_c.zip .
 unzip airbnb_c.zip
+hdfs dfs -mkdir -p project
 hdfs dfs -put airbnb_c/* project
 ```
 
