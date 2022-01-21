@@ -6,6 +6,7 @@ object Facts {
     val sqlContext = SparkSession.builder()
       .appName("Facts")
       .enableHiveSupport()
+      .config("spark.master", "local")
       .getOrCreate()
 
     val berlinListingsDS = sqlContext.read.format("org.apache.spark.csv")
