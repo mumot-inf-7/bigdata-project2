@@ -13,7 +13,7 @@ object Facts {
       .option("quote", "\"")
       .option("escape", "\"")
       .option("multiline", true)
-      .csv("BerlinListings.csv")
+      .csv("/project2/BerlinListings.csv")
       .cache()
 
     val parisListingsDS = sqlContext.read.format("org.apache.spark.csv")
@@ -22,7 +22,7 @@ object Facts {
       .option("quote", "\"")
       .option("escape", "\"")
       .option("multiline", true)
-      .csv("ParisListings.csv")
+      .csv("/project2/ParisListings.csv")
       .cache()
 
     val madridListingsDS = sqlContext.read.format("org.apache.spark.csv")
@@ -30,7 +30,7 @@ object Facts {
       .option("quote", "\"")
       .option("escape", "\"")
       .option("multiline", true)
-      .csv("MadridListings.csv")
+      .csv("/project2/MadridListings.csv")
       .cache()
 
     val listingsDS = berlinListingsDS
@@ -42,7 +42,7 @@ object Facts {
       .option("quote", "\"")
       .option("escape", "\"")
       .option("multiline", true)
-      .csv("BerlinCalendar.csv")
+      .csv("/project2/BerlinCalendar.csv")
       .cache()
 
     val madridCalendarDS = sqlContext.read.format("org.apache.spark.csv")
@@ -50,7 +50,7 @@ object Facts {
       .option("quote", "\"")
       .option("escape", "\"")
       .option("multiline", true)
-      .csv("MadridCalendar.csv")
+      .csv("/project2/MadridCalendar.csv")
       .drop("adjusted_price", "minimum_nights", "maximum_nights")
       .cache()
 
@@ -59,6 +59,6 @@ object Facts {
       option("quote", "\"").
       option("escape", "\"").
       option("multiline", true).
-      csv("ParisCalendar.csv").cache()
+      csv("/project2/ParisCalendar.csv").cache()
   }
 }
