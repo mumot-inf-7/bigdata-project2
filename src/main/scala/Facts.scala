@@ -5,7 +5,6 @@ object Facts {
   def run(): Unit = {
     val sqlContext = SparkSession.builder()
       .appName("Facts")
-      .enableHiveSupport()
       .config("spark.master", "local")
       .getOrCreate()
 
