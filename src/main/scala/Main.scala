@@ -8,7 +8,7 @@ object Main {
     val ds = getDS()
 
     Facts().run()
-    Times(ds.calendarsDS).run()
+    Times(ds.calendarDS).run()
   }
 
   def getDS()= {
@@ -45,11 +45,7 @@ object Main {
           .drop("adjusted_price", "minimum_nights", "maximum_nights")
       )
 
-    object X{
-      val calendarsDS: DataFrame = calendarsDS
-      val listingsDS: DataFrame = listingsDS
-    }
-
-    X
+    case class X(calendarDS: DataFrame, listingsDS: DataFrame)
+    X(calendarsDS, listingsDS)
   }
 }
