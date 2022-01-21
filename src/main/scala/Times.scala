@@ -10,7 +10,7 @@ case class Times(calendarDS: DataFrame) {
       .withColumn("day", dayofmonth(col("date")))
       .withColumn("month", month(col("date")))
       .withColumn("year", year(col("date")))
-      .select("date_id", "date", "day", "month", "year")
+      .select("date", "day", "month", "year")
 
     timesDS.write.insertInto("times")
   }
