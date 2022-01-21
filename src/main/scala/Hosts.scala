@@ -8,7 +8,7 @@ case class Hosts(citiesListingDS: Cities[DataFrame]) {
     citiesListingDS.map((df, city) => df
       .select("host_id", "host_name")
       .distinct()
-      .withColumn("id", lit(city)+col("host_id"))
+      .withColumn("id", col("host_id"))
       .cache()
     )
       .toList()

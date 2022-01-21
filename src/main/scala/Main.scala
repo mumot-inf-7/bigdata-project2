@@ -8,8 +8,6 @@ object Main {
     path = args(0)
     val ds = getDS()
 
-    ds.listingsDS.map((f,c) => f.write.insertInto("listings"+c))
-
     val times = Times(ds.calendarDS.toList().reduce((a,b) => a.union(b))).run()
     val places = Places(ds.listingsDS).run()
     val hosts = Hosts(ds.listingsDS).run()
