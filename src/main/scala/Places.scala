@@ -8,26 +8,26 @@ case class Places(citiesListingDS: Cities[DataFrame]) {
     val berlinNeighbourhoodsDS = citiesListingDS.berlin
       .select("neighbourhood", "neighbourhood_group")
       .distinct()
-      .withColumn("neighbourhood_id", monotonically_increasing_id + 1)
+      .withColumn("id", monotonically_increasing_id + 1)
       .withColumn("city", lit("Berlin"))
-      .select("neighbourhood_id", "neighbourhood", "neighbourhood_group", "city")
+      .select("id", "neighbourhood", "neighbourhood_group", "city")
 
     val parisNeighbourhoodsDS = citiesListingDS.paris
       .select("neighbourhood", "neighbourhood_group")
       .distinct()
-      .withColumn("neighbourhood_id", monotonically_increasing_id + 1)
+      .withColumn("id", monotonically_increasing_id + 1)
       .withColumn("city", lit("Paris"))
-      .select("neighbourhood_id", "neighbourhood", "neighbourhood_group", "city")
+      .select("id", "neighbourhood", "neighbourhood_group", "city")
 
     val madridNeighbourhoodsDS = citiesListingDS.madrid
       .select("neighbourhood", "neighbourhood_group")
       .distinct()
-      .withColumn("neighbourhood_id", monotonically_increasing_id + 1)
+      .withColumn("id", monotonically_increasing_id + 1)
       .withColumn("city", lit("Madrid"))
-      .select("neighbourhood_id", "neighbourhood", "neighbourhood_group", "city")
+      .select("id", "neighbourhood", "neighbourhood_group", "city")
 
-    berlinNeighbourhoodsDS.write.insertInto("neighbourhoods")
-    parisNeighbourhoodsDS.write.insertInto("neighbourhoods")
-    madridNeighbourhoodsDS.write.insertInto("neighbourhoods")
+    berlinNeighbourhoodsDS.write.insertInto("places")
+    parisNeighbourhoodsDS.write.insertInto("places")
+    madridNeighbourhoodsDS.write.insertInto("places")
   }
 }
