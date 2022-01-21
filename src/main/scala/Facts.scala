@@ -1,4 +1,5 @@
 import org.apache.spark.sql._
+import org.apache.spark.sql.functions._
 
 object Facts {
   def run(): Unit = {
