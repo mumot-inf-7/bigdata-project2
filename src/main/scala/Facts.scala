@@ -2,63 +2,36 @@ import org.apache.spark.sql._
 import org.apache.spark.sql.functions._
 
 object Facts {
-  def run(): Unit = {
+  def read(path: String) = {
+
+  }
+
+  def run(path: String): Unit = {
+
     val sqlContext = SparkSession.builder()
       .appName("Facts")
       .config("spark.master", "local")
       .getOrCreate()
 
-    val berlinListingsDS = sqlContext.read.format("org.apache.spark.csv")
-      .option("header", true).option("inferSchema", true)
-      .option("quote", "\"")
-      .option("escape", "\"")
-      .option("multiline", true)
-      .csv("/project2/BerlinListings.csv")
-      .cache()
+    def readCsvFile(fileName: String) = {
+      sqlContext.read.format("org.apache.spark.csv")
+        .option("header", true).option("inferSchema", true)
+        .option("quote", "\"")
+        .option("escape", "\"")
+        .option("multiline", true)
+        .csv(path + "/" + fileName)
+        .cache()
+    }
 
-    val parisListingsDS = sqlContext.read.format("org.apache.spark.csv")
-      .option("header", true)
-      .option("inferSchema", true)
-      .option("quote", "\"")
-      .option("escape", "\"")
-      .option("multiline", true)
-      .csv("/project2/ParisListings.csv")
-      .cache()
+    val cities = List("Berlin", "Paris", "Madrid")
 
-    val madridListingsDS = sqlContext.read.format("org.apache.spark.csv")
-      .option("header", true).option("inferSchema", true)
-      .option("quote", "\"")
-      .option("escape", "\"")
-      .option("multiline", true)
-      .csv("/project2/MadridListings.csv")
-      .cache()
+    val listingsDS = cities
+      .map(city => readCsvFile(s"${city}Listings.csv"))
+      .reduce((a, b) => a.union(b))
 
-    val listingsDS = berlinListingsDS
-      .union(parisListingsDS)
-      .union(madridListingsDS)
+    val calendarsDS = cities
+      .map(city => readCsvFile(s"${city}Calendar.csv"))
+      .reduce((a, b) => a.union(b))
 
-    val berlinCalendarDS = sqlContext.read.format("org.apache.spark.csv")
-      .option("header", true).option("inferSchema", true)
-      .option("quote", "\"")
-      .option("escape", "\"")
-      .option("multiline", true)
-      .csv("/project2/BerlinCalendar.csv")
-      .cache()
-
-    val madridCalendarDS = sqlContext.read.format("org.apache.spark.csv")
-      .option("header", true).option("inferSchema", true)
-      .option("quote", "\"")
-      .option("escape", "\"")
-      .option("multiline", true)
-      .csv("/project2/MadridCalendar.csv")
-      .drop("adjusted_price", "minimum_nights", "maximum_nights")
-      .cache()
-
-    val parisCalendarDS = sqlContext.read.format("org.apache.spark.csv").
-      option("header", true).option("inferSchema", true).
-      option("quote", "\"").
-      option("escape", "\"").
-      option("multiline", true).
-      csv("/project2/ParisCalendar.csv").cache()
   }
 }
