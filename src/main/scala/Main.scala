@@ -10,6 +10,7 @@ object Main {
 
     Times(ds.calendarDS.toList().reduce((a,b) => a.union(b))).run()
     Places(ds.listingsDS).run()
+    Hosts(ds.listingsDS).run()
     Facts().run()
 
   }
