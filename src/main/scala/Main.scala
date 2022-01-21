@@ -34,8 +34,6 @@ object Main {
         .cache()
     }
 
-    val cities = List("Berlin", "Paris", "Madrid")
-
     val citiesListingsDS = CitiesBuilder.fromFn(city => readCsvFile(s"${city}Listings.csv"))
 
     val calendarsDS = List("Berlin", "Paris")
