@@ -11,7 +11,7 @@ object Main {
     val ds = getDS()
 
     Times(ds.calendarDS).run()
-    Places(ds.listingsDS)
+    Places(ds.listingsDS).run()
     Facts().run()
 
   }
