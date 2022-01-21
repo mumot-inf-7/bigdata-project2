@@ -1,4 +1,7 @@
 import org.apache.spark.sql.{DataFrame, SparkSession}
+import cities._
+
+type B = "berlin"
 
 object Main {
   var path: String = ""
@@ -7,11 +10,13 @@ object Main {
     path = args(0)
     val ds = getDS()
 
-    Facts().run()
     Times(ds.calendarDS).run()
+    Places(ds.listingsDS)
+    Facts().run()
+
   }
 
-  def getDS()= {
+  def getDS() = {
     val sqlContext = SparkSession.builder()
       .appName("Facts")
       .config("spark.master", "local")
@@ -33,9 +38,7 @@ object Main {
 
     val cities = List("Berlin", "Paris", "Madrid")
 
-    val listingsDS = cities
-      .map(city => readCsvFile(s"${city}Listings.csv"))
-      .reduce((a, b) => a.union(b))
+    val citiesListingsDS = CitiesBuilder.fromFn(city => readCsvFile(s"${city}Listings.csv"))
 
     val calendarsDS = List("Berlin", "Paris")
       .map(city => readCsvFile(s"${city}Calendar.csv"))
@@ -45,7 +48,7 @@ object Main {
           .drop("adjusted_price", "minimum_nights", "maximum_nights")
       )
 
-    case class X(calendarDS: DataFrame, listingsDS: DataFrame)
-    X(calendarsDS, listingsDS)
+    case class X(calendarDS: DataFrame, listingsDS: Cities[DataFrame])
+    X(calendarsDS, citiesListingsDS)
   }
 }
