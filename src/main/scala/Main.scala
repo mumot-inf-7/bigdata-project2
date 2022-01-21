@@ -8,7 +8,7 @@ object Main {
     path = args(0)
     val ds = getDS()
 
-    Times(ds.calendarDS).run()
+    Times(ds.calendarDS.toList().reduce((a,b) => a.union(b))).run()
     Places(ds.listingsDS).run()
     Facts().run()
 
@@ -36,15 +36,17 @@ object Main {
 
     val citiesListingsDS = CitiesBuilder.fromFn(city => readCsvFile(s"${city}Listings.csv"))
 
-    val calendarsDS = List("Berlin", "Paris")
-      .map(city => readCsvFile(s"${city}Calendar.csv"))
-      .reduce((a, b) => a.union(b))
-      .union(
-        getDF("MadridCalendar.csv")
+    val citiesCalendarsDS = CitiesBuilder.fromFn {
+      case CityNames.Madrid =>
+        getDF(s"${_}Calendar.csv")
           .drop("adjusted_price", "minimum_nights", "maximum_nights")
-      )
+          .cache()
+      case _ =>
+        readCsvFile(s"${_}Calendar.csv")
+    }
 
-    case class X(calendarDS: DataFrame, listingsDS: Cities[DataFrame])
-    X(calendarsDS, citiesListingsDS)
+
+    case class X(calendarDS: Cities[DataFrame], listingsDS: Cities[DataFrame])
+    X(citiesCalendarsDS, citiesListingsDS)
   }
 }
