@@ -4,7 +4,7 @@ import cities.Cities
 
 case class Places(citiesListingDS: Cities[DataFrame]) {
 
-  def run(): Unit = {
+  def run() = {
     val berlinNeighbourhoodsDS = citiesListingDS.berlin
       .select("neighbourhood", "neighbourhood_group")
       .distinct()
@@ -31,7 +31,6 @@ case class Places(citiesListingDS: Cities[DataFrame]) {
       .union(berlinNeighbourhoodsDS)
       .withColumn("id", monotonically_increasing_id + 1)
       .select("id","neighbourhood", "neighbourhood_group", "city")
-      .write
-      .insertInto("places")
+      .cache()
   }
 }
