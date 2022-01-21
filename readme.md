@@ -19,8 +19,8 @@ sudo apt-get install sbt
 ```shell
 gsutil cp gs://pbd_dm_21/airbnb_c.zip .
 unzip airbnb_c.zip
-hdfs dfs -mkdir -p project
-hdfs dfs -put airbnb_c/* project
+hdfs dfs -mkdir /project
+hdfs dfs -put airbnb_c/* /project
 ```
 
 ## clone repo
@@ -37,5 +37,5 @@ spark-shell -i src/Database.scala
 ## compile and run scala
 ```shell
 sbt package 
-spark-submit target/scala-2.12/spark_airbnb_2.12-0.1.jar project
+spark-submit target/scala-2.12/spark_airbnb_2.12-0.1.jar /project
 ```
