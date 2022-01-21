@@ -1,9 +1,9 @@
 package cities {
 
   object CityNames {
-    val Madrid = "madrid"
-    val Paris = "paris"
-    val Berlin = "berlin"
+    val Madrid = "Madrid"
+    val Paris = "Paris"
+    val Berlin = "Berlin"
   }
 
   object CitiesBuilder {
