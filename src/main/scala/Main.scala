@@ -37,12 +37,13 @@ object Main {
     val citiesListingsDS = CitiesBuilder.fromFn(city => readCsvFile(s"${city}Listings.csv"))
 
     val citiesCalendarsDS = CitiesBuilder.fromFn {
-      case CityNames.Madrid =>
-        getDF(s"${_}Calendar.csv")
+      case city@CityNames.Madrid => {
+        getDF(s"${city}Calendar.csv")
           .drop("adjusted_price", "minimum_nights", "maximum_nights")
           .cache()
-      case _ =>
-        readCsvFile(s"${_}Calendar.csv")
+      }
+      case city =>
+        readCsvFile(s"${city}Calendar.csv")
     }
 
 
